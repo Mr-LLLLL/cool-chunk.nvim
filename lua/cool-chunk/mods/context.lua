@@ -55,7 +55,8 @@ function context_mod:render()
     if #self.old_ctx_range > 2 and
         ctx_range[1] == self.old_ctx_range[1] and
         ctx_range[2] == self.old_ctx_range[2] and
-        ctx_range[3] == self.old_ctx_range[3] then
+        ctx_range[3] == self.old_ctx_range[3] and
+        not self.text_changed then
         return
     end
 

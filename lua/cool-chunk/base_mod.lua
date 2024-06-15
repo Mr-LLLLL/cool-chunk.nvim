@@ -40,6 +40,7 @@ local BaseMod = {
     bufnr = 0,
     old_ctx_range = {},
     old_chunk_range = {},
+    text_changed = false,
     is_error = false,
     is_loaded = false,
     is_enabled = false,
@@ -83,6 +84,13 @@ function BaseMod:enable_mod_autocmd()
         pattern = utils.filetype2pattern(self.options.support_filetypes),
         callback = function()
             self:render()
+        end,
+    })
+    api.nvim_create_autocmd({ "TextChanged", "TextChangedI" }, {
+        group = self.augroup_name,
+        pattern = utils.filetype2pattern(self.options.support_filetypes),
+        callback = function()
+            self.text_changed = true
         end,
     })
 end
@@ -186,6 +194,7 @@ function BaseMod:clear(line_start, line_end)
     self.old_chunk_range = {}
     self.bufnr = 0
     self.is_error = nil
+    self.text_changed = false
 
     if self.ns_id ~= -1 then
         api.nvim_buf_clear_namespace(self.bufnr, self.ns_id, line_start, line_end)

@@ -61,10 +61,12 @@ function chunk_mod:render()
     if #self.old_chunk_range > 1 and
         cur_chunk_range[1] == self.old_chunk_range[1] and
         cur_chunk_range[2] == self.old_chunk_range[2] and
-        is_error == self.is_error then
+        is_error == self.is_error and
+        not self.text_changed then
         return
     end
 
+    local text_changed = self.text_changed
     self:clear()
     self:refresh({
         chunk_range = cur_chunk_range,
@@ -73,7 +75,7 @@ function chunk_mod:render()
 
     if cur_chunk_range[2] - cur_chunk_range[1] >= api.nvim_win_get_height(0) or
         fn.indent(cur_chunk_range[1]) == 0 or
-        self.options.animate_duration == 0 then
+        self.options.animate_duration == 0 or text_changed then
         chunk_mod:draw_by_direct(cur_chunk_range, hl_group)
     else
         chunk_mod:draw_by_animate(cur_chunk_range, hl_group)
