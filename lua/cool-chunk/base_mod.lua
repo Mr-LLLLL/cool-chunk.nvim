@@ -144,10 +144,7 @@ function BaseMod:draw_by_animate(opts, len)
         row_opts.virt_text = { { opts.virt_text[index][1], opts.hl_group } }
         row_opts.virt_text_win_col = opts.offset[index]
         local id
-        local space_tab = (" "):rep(shiftwidth)
-        local line_val = vim.fn.getline(opts.line_num[index]):gsub("\t", space_tab)
-        if #vim.fn.getline(opts.line_num[index]) <= indent or
-            line_val:sub(indent + 1, indent + 1):match("%s") then
+        if utils.is_blank_at(vim.fn.getline(opts.line_num[index]), indent) then
             if utils.col_in_screen(indent) then
                 id = api.nvim_buf_set_extmark(opts.bufnr, self.ns_id, opts.line_num[index] - 1, 0, row_opts)
             end

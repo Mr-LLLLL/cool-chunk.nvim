@@ -147,9 +147,7 @@ function chunk_mod:draw_by_direct(range, hl_group)
     for i = beg_row + 1, end_row - 1 do
         row_opts.virt_text = { { self.options.chars.vertical_line, hl_group } }
         row_opts.virt_text_win_col = start_col - offset
-        local space_tab = (" "):rep(shiftwidth)
-        local line_val = fn.getline(i):gsub("\t", space_tab)
-        if #fn.getline(i) <= start_col or line_val:sub(start_col + 1, start_col + 1):match("%s") then
+        if utils.is_blank_at(fn.getline(i), start_col) then
             if utils.col_in_screen(start_col) then
                 api.nvim_buf_set_extmark(self.bufnr, self.ns_id, i - 1, 0, row_opts)
             end
